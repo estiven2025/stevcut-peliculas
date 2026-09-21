@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StevCut</title>
+    <meta
+      name="description"
+      content="Aplicación web de películas y música con diseño cinematográfico y carga progresiva."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="Cinematic Pulse">
+          <span class="brand-mark">S</span>
+          <span>StevCut</span>
+        </div>
+
+        <button class="menu-toggle" aria-label="Abrir menú" type="button">☰</button>
+
+        <nav class="nav" aria-label="Navegación principal">
+          <button class="nav-link active" data-target="home" type="button">INICIO</button>
+          <button class="nav-link" data-target="movies" type="button">PELÍCULAS</button>
+          <button class="nav-link" data-target="genres" type="button">GÉNEROS</button>
+          <button class="nav-link" data-target="music" type="button">MÚSICA</button>
+        </nav>
+      </header>
+
+      <main class="main-content">
+        <section id="home" class="panel active" aria-label="Inicio">
+          <div id="hero" class="hero" aria-live="polite"></div>
+        </section>
+
+        <section id="movies" class="panel" aria-label="Películas">
+          <div class="movies-toolbar">
+            <label class="search-box" aria-label="Buscar películas">
+              <span>⌕</span>
+              <input id="movieSearch" type="search" placeholder="Buscar películas..." />
+            </label>
+          </div>
+
+          <div id="genreFilter" class="genre-filter" aria-label="Filtro por género"></div>
+
+          <div id="movieGrid" class="movie-grid" aria-live="polite"></div>
+
+          <div class="load-more-wrap">
+            <button id="loadMoreBtn" class="load-more hidden" type="button">VER MÁS</button>
+          </div>
+        </section>
+
+        <section id="genres" class="panel" aria-label="Géneros">
+          <div class="section-header">
+            <p class="eyebrow">Catálogo</p>
+            <h2>Explora por género</h2>
+          </div>
+          <div id="genreOverview" class="genre-overview"></div>
+        </section>
+
+        <section id="music" class="panel" aria-label="Música">
+          <a href="https://www.google.com/search?gs_ssp=eJzj4tVP1zc0TMsozy42yjVUYDRgdGDwYi8uyC_JTKsEAHG6CCM&q=spotify&oq=spo&gs_lcrp=EgZjaHJvbWUqDAgBEC4YJxjHARjRAzIGCAAQRRg5MgwIARAuGCcYxwEY0QMyCggCEAAYgAQYtAcyCggDEAAYsQMYgAQyDQgEEAAYgwEYsQMYgAQyDQgFEC4YgwEYsQMYgAQyCggGEAAYsQMYgAQyBwgHEAAYgAQyDQgIEAAYgwEYsQMYgAQyBwgJEAAYjwLSAQgxODY5ajBqN6gCCLACAfEFs2QiNLIknVM&sourceid=chrome&source=chrome.ob&ie=UTF-8"></a>
+          <div class="section-header">
+            <p class="eyebrow">Audio</p>
+            <h2>Música local</h2>
+          </div>
+
+          <div id="musicState" class="music-state"></div>
+          <div id="musicList" class="music-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="movieModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" type="button" aria-label="Cerrar">×</button>
+
+        <div class="modal-poster-wrap">
+          <img id="modalPoster" class="modal-poster" alt="Poster de la película" loading="lazy" />
+        </div>
+
+        <div class="modal-content">
+          <div class="modal-meta-top">
+            <p id="modalMeta" class="modal-meta"></p>
+            <span id="modalRating" class="rating-badge"></span>
+          </div>
+
+          <h3 id="modalTitle"></h3>
+
+          <div class="modal-stats">
+            <span id="modalYear"></span>
+            <span id="modalDuration"></span>
+            <span id="modalGenre"></span>
+          </div>
+
+          <p id="modalDescription" class="modal-description"></p>
+
+          <div class="platforms-box">
+            <p>¿DÓNDE QUIERES VERLA?</p>
+            <div id="modalPlatforms" class="platforms"></div>
+          </div>
+
+          <a id="watchButton" class="watch-button" href="#" target="_blank" rel="noopener noreferrer">
+            VER PELÍCULA
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="miniPlayer" class="mini-player hidden" aria-live="polite">
+      <div class="mini-player-inner">
+        <div class="mini-cover-wrap">
+          <img id="miniCover" src="" alt="Portada de la canción" />
+        </div>
+
+        <div class="mini-nowplaying">
+          <strong id="miniTitle">Sin canción</strong>
+          <span id="miniArtist">Selecciona una pista</span>
+        </div>
+
+        <div class="mini-controls">
+          <button class="control-btn" id="prevTrackBtn" type="button" aria-label="Anterior">⏮</button>
+          <button class="control-btn primary" id="playPauseBtn" type="button" aria-label="Reproducir">▶</button>
+          <button class="control-btn" id="nextTrackBtn" type="button" aria-label="Siguiente">⏭</button>
+        </div>
+
+        <div class="mini-progress-wrap">
+          <div class="time-group">
+            <span id="currentTime">0:00</span>
+            <span id="totalTime">0:00</span>
+          </div>
+          <input id="progressBar" type="range" min="0" max="100" value="0" aria-label="Progreso" />
+          <div class="volume-row">
+            <span>🔊</span>
+            <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.7" aria-label="Volumen" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/data.js"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
